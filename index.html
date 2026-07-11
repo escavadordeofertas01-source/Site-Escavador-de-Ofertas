@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escavador de Ofertas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rye&family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-dark:#171008;
+    --bg-dirt:#2c1f13;
+    --gold:#f4c118;
+    --gold-deep:#b9860a;
+    --cream:#f4ecd8;
+    --green:#3ea34d;
+    --green-deep:#2b7a38;
+    --copper:#8a5a2b;
+    --ink:#1c140d;
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% 0%, #3a2a17 0%, var(--bg-dark) 55%, var(--ink) 100%);
+    font-family:'Inter',sans-serif;
+    color:var(--cream);
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    overflow-x:hidden;
+  }
+
+  /* subtle mine-shaft light rays behind everything */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:conic-gradient(from 0deg at 50% 15%,
+      rgba(244,193,24,0.07) 0deg, transparent 12deg,
+      transparent 24deg, rgba(244,193,24,0.05) 30deg,
+      transparent 42deg, transparent 54deg, rgba(244,193,24,0.06) 60deg,
+      transparent 72deg, transparent 360deg);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .scene{
+    position:relative;
+    width:100%;
+    max-width:480px;
+    min-height:100vh;
+    padding:56px 24px 40px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    z-index:1;
+  }
+
+  /* --- logo real do Escavador de Ofertas --- */
+  .logo{
+    width:150px;
+    height:150px;
+    object-fit:contain;
+    margin-bottom:20px;
+    filter:drop-shadow(0 10px 18px rgba(0,0,0,0.5));
+  }
+
+  .eyebrow{
+    font-family:'Oswald',sans-serif;
+    font-weight:600;
+    letter-spacing:3px;
+    font-size:13px;
+    color:var(--gold);
+    margin-bottom:10px;
+    text-align:center;
+  }
+
+  h1{
+    font-family:'Rye',serif;
+    font-size:44px;
+    line-height:1.05;
+    text-align:center;
+    color:var(--gold);
+    margin:0 0 18px;
+    text-shadow:
+      2px 2px 0 var(--ink),
+      -2px -2px 0 var(--ink),
+      2px -2px 0 var(--ink),
+      -2px 2px 0 var(--ink),
+      0 6px 0 rgba(0,0,0,0.35);
+    letter-spacing:1px;
+  }
+
+  .sub{
+    text-align:center;
+    font-size:16px;
+    line-height:1.5;
+    color:var(--cream);
+    opacity:0.92;
+    margin:0 0 8px;
+  }
+  .sub strong{color:var(--gold);}
+
+  .buttons{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    margin-bottom:8px;
+  }
+
+  /* wood-plank button */
+  .plank{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    width:100%;
+    padding:16px 20px;
+    border-radius:10px;
+    text-decoration:none;
+    background:linear-gradient(160deg,#a06a34 0%, var(--copper) 55%, #6b431e 100%);
+    border:2px solid #5a3a1c;
+    box-shadow:0 8px 0 #3d2612, 0 14px 20px rgba(0,0,0,0.45);
+    color:var(--cream);
+  }
+  .plank .icon{
+    flex:0 0 auto;
+    font-size:26px;
+    filter:drop-shadow(0 2px 2px rgba(0,0,0,0.4));
+  }
+  .plank .text{flex:1;}
+  .plank .label{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:15.5px;
+    letter-spacing:0.4px;
+    display:block;
+    color:var(--cream);
+  }
+  .plank .caption{
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    color:rgba(244,236,216,0.75);
+    display:block;
+    margin-top:2px;
+  }
+
+  .plank.whatsapp{
+    background:linear-gradient(160deg,#4fbf5f 0%, var(--green) 55%, var(--green-deep) 100%);
+    border-color:#1f5c28;
+    box-shadow:0 8px 0 #1a4a21, 0 14px 24px rgba(0,0,0,0.5);
+  }
+
+  /* --- signature element: pickaxe striking the WhatsApp plank --- */
+  .strike-wrap{
+    position:relative;
+  }
+
+  .pickaxe{
+    position:absolute;
+    top:-34px;
+    right:14px;
+    font-size:52px;
+    transform-origin:88% 88%;
+    animation:swing 2.6s cubic-bezier(.45,0,.55,1) infinite;
+    z-index:3;
+    filter:drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+  }
+
+  @keyframes swing{
+    0%    { transform:rotate(-58deg); }
+    58%   { transform:rotate(-58deg); }
+    70%   { transform:rotate(8deg); }
+    78%   { transform:rotate(-12deg); }
+    100%  { transform:rotate(-58deg); }
+  }
+
+  .plank.whatsapp{
+    animation:hit 2.6s cubic-bezier(.45,0,.55,1) infinite;
+  }
+
+  @keyframes hit{
+    0%,64%  { transform:translate(0,0) rotate(0deg); }
+    70%     { transform:translate(-3px,2px) rotate(-1deg); }
+    74%     { transform:translate(3px,-1px) rotate(1deg); }
+    80%     { transform:translate(-1px,1px) rotate(0deg); }
+    88%,100%{ transform:translate(0,0) rotate(0deg); }
+  }
+
+  .spark{
+    position:absolute;
+    top:-8px;
+    right:26px;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--gold);
+    opacity:0;
+    z-index:2;
+  }
+  .spark:nth-child(1){animation:burst 2.6s infinite; animation-delay:0s;}
+  .spark:nth-child(2){animation:burst 2.6s infinite; animation-delay:.04s; background:#caa24a;}
+  .spark:nth-child(3){animation:burst 2.6s infinite; animation-delay:.08s; background:var(--cream);}
+
+  @keyframes burst{
+    0%,66%{ opacity:0; transform:translate(0,0) scale(0.4); }
+    70%   { opacity:1; transform:translate(0,0) scale(1); }
+    82%   { opacity:0; transform:translate(var(--dx,14px),var(--dy,-10px)) scale(0.3); }
+    100%  { opacity:0; }
+  }
+  .spark:nth-child(1){--dx:16px; --dy:-14px;}
+  .spark:nth-child(2){--dx:-14px; --dy:-10px;}
+  .spark:nth-child(3){--dx:4px; --dy:-18px;}
+
+  .note{
+    text-align:center;
+    font-size:12px;
+    color:rgba(244,236,216,0.55);
+    margin-top:30px;
+    line-height:1.5;
+  }
+
+  .dirt-mound{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    height:70px;
+    background:linear-gradient(180deg, transparent 0%, #3a281a 60%, #241708 100%);
+    clip-path:polygon(0% 40%, 6% 30%, 14% 46%, 22% 26%, 32% 42%, 42% 22%, 52% 40%,
+                       62% 24%, 72% 44%, 82% 28%, 90% 42%, 100% 30%, 100% 100%, 0% 100%);
+    z-index:0;
+    pointer-events:none;
+    opacity:0.9;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .pickaxe, .plank.whatsapp, .spark{animation:none !important;}
+  }
+
+  @media (max-width:380px){
+    h1{font-size:36px;}
+    .emblem{width:108px;height:108px;font-size:46px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="dirt-mound"></div>
+
+<div class="scene">
+
+  <img class="logo" src="logo.png" alt="Escavador de Ofertas">
+
+  <div class="eyebrow">⛏ GARIMPO DE PROMOÇÃO ⛏</div>
+  <h1>ESCAVADOR<br>DE OFERTAS</h1>
+
+  <p class="sub">Quem cava fundo, acha o <strong>preço certo</strong>.</p>
+
+  <div class="buttons">
+
+    <div class="strike-wrap">
+      <div class="pickaxe">⛏️</div>
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <span class="spark"></span>
+      <a class="plank whatsapp" href="#" target="_blank" rel="noopener">
+        <span class="icon">💬</span>
+        <span class="text">
+          <span class="label">ENTRAR NO GRUPO DO WHATSAPP</span>
+          <span class="caption">clique aqui pra entrar</span>
+        </span>
+      </a>
+    </div>
+
+  </div>
+
+  <p class="note">Ofertas de Mercado Livre, Shopee e Amazon direto no seu grupo.<br>Sem enrolação, só garimpo bom.</p>
+
+</div>
+
+</body>
+</html>
